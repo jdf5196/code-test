@@ -5,7 +5,7 @@ const Data = mongoose.model('Data');
 
 module.exports = {
     // Generate a random array of data
-    generateData: function(){
+    generateRandomData: function(){
         let arr = [];
         for(let i = 0; i < 10; i++){
             let dataPoint = {
@@ -16,25 +16,64 @@ module.exports = {
         };
         return arr
     },
-    // Get the current data saved to the db or generate it if there is no data
-    getCurrentData: function(callback){
+
+    // Create data store if one does not exist already
+    createData: function(callback){
         Data.findOne((err, data)=>{
+            if(err){console.log(err)}
             if(!data){
-                this.saveCurrentData(callback)
+                let d = new Data;
+                let newData = this.generateRandomData();
+                d.currentData = newData;
+                d.save((err, d)=>{
+                    if(err){console.log(err)}
+                    callback(d)
+                })
             }else{
-                callback(data.currentData);
+                callback(data)
             }
         })
     },
-    // Generate and save new current data to the db
-    saveCurrentData: function(callback){
-        let d = new Data;
-        let newData = this.generateData();
-        d.getNewCurrentData(newData);
-        d.save((err, d)=>{
-            if(err){return err};
-            callback(d.currentData);
+
+    // Get the current data saved to the db
+    getCurrentData: function(callback){
+        Data.findOne((err, data)=>{
+            if(err){console.log(err)};
+            callback(data.currentData);
         })
+    },
+
+    // Generate and save new current data to the db
+    generateNewCurrentData: function(callback){
+        let newData = this.generateRandomData();
+        Data.findOne((err, data)=>{
+            if(err){console.log(err)}
+            data.getNewCurrentData(newData);
+            data.save((err, d)=>{
+                if(err){console.log(err)};
+                callback(d.currentData);
+            })
+        })
+    },
+
+    // Save current data to the saved data array
+    saveCurrentData: function(newData, callback){
+        Data.findOne((err, data)=>{
+            if(err){console.log(err)}
+            data.addSavedData(newData);
+            data.save((err, d)=>{
+                if(err){console.log(err)};
+                callback(d);
+            })
+        })
+    },
+
+    // Get the data saved to the saved data array
+    getSavedData: function(callback){
+        Data.findOne((err, data)=>{
+            if(err){console.log(err)};
+            callback(data.savedData);
+        });
     }
 }
 

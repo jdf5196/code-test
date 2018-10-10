@@ -6,8 +6,6 @@ const WebSocket = require('ws');
 const utils = require('./utils.js');
 const db = 'mongodb://127.0.0.1:27017/jdfbitotest';
 mongoose.connect(db);
-require('./models/Data.js');
-const Data = mongoose.model('Data');
 
 const port = process.env.PORT || 3000;
 
@@ -15,6 +13,9 @@ const port = process.env.PORT || 3000;
 const server = express()
     .use(express.static(process.cwd() + '/build'))
     .listen(port, ()=>{
+        utils.createData((d)=>{
+            console.log('Data ready')
+        });
         console.log(`Listening on port ${port}.`)
     });
 
@@ -27,12 +28,24 @@ wss.on('connection', (ws, req)=>{
     console.log(`${id} has joined`);
     utils.getCurrentData((d)=>{
         ws.send(JSON.stringify(d));
+    });
+    ws.on('message', (data)=>{
+        let msg = JSON.parse(data);
+        switch(msg.type){
+            case 'save':
+                utils.saveCurrentData(msg.data, (d)=>{
+                    console.log(d);
+                    let newMsg = {type: "saveConfirmation"}
+                    ws.send(JSON.stringify(newMsg));
+                });
+                break;
+        }
     })
 });
 
 // Create and send new data to each connected user every 10 seconds
 setInterval(()=>{
-    utils.saveCurrentData((d)=>{
+    utils.generateNewCurrentData((d)=>{
         wss.clients.forEach((client)=>{
             client.send(JSON.stringify(d))
         })
