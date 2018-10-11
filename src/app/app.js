@@ -10,7 +10,8 @@ class App extends React.Component{
             ws: {},
             data: {
                 currentData: [],
-                savedData: []
+                savedData: [],
+                isCurrentDataSaved: false
             }
         }
         this.saveData = this.saveData.bind(this);
@@ -26,14 +27,17 @@ class App extends React.Component{
         this.state.ws.onmessage = (e)=>{
             let data = JSON.parse(e.data);
             console.log('Data received')
+            console.log(data.currentData)
             this.setState({
                 data: data
             });
         }
     }
     saveData(){
-        let data = {data: this.state.data.currentData, type:"save"};
-        this.state.ws.send(JSON.stringify(data));
+        if(!this.state.data.isCurrentDataSaved){
+            let data = {data: this.state.data.currentData, type:"save"};
+            this.state.ws.send(JSON.stringify(data));
+        }
     }
     render(){
         return(

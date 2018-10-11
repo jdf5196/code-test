@@ -46,7 +46,7 @@ class Chart extends React.Component{
 
         svg.selectAll("dot")
             .data(newChartData).enter().append("circle")
-            .attr("r", 5)
+            .attr("r", 3)
             .attr("cx", d=>x(d.x))
             .attr("cy", d=> y(d.y));
         

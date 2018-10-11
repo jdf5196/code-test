@@ -10,7 +10,8 @@ module.exports = {
         for(let i = 0; i < 10; i++){
             let dataPoint = {
                 x: Math.round(Math.random() * 100),
-                y: Math.round(Math.random() * 100)
+                y: Math.round(Math.random() * 100),
+                saved: false
             };
             arr.push(dataPoint)
         };
@@ -69,7 +70,7 @@ module.exports = {
     },
 
     // Get the data saved to the saved data array
-    getSavedData: function(callback){
+    getData: function(callback){
         Data.findOne((err, data)=>{
             if(err){console.log(err)};
             callback(data);

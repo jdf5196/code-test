@@ -3,7 +3,9 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const WebSocket = require('ws');
+const path = require('path');
 const utils = require('./utils.js');
+const compression = require('compression');
 const db = 'mongodb://127.0.0.1:27017/jdfbitotest';
 mongoose.connect(db);
 
@@ -11,13 +13,17 @@ const port = process.env.PORT || 3000;
 
 // Create express server
 const server = express()
+    .use(compression())
     .use(express.static(process.cwd() + '/build'))
+    .get('/*', function(req, res){
+		res.sendFile(path.resolve(__dirname, '../', 'build/index.html'));
+	})
     .listen(port, ()=>{
         utils.createData((d)=>{
             console.log('Data ready')
         });
         console.log(`Listening on port ${port}.`)
-    });
+    })
 
 // Create websocket server with express server
 const wss = new WebSocket.Server({server});
@@ -34,7 +40,9 @@ wss.on('connection', (ws, req)=>{
         switch(msg.type){
             case 'save':
                 utils.saveCurrentData(msg.data, (d)=>{
-                    ws.send(JSON.stringify(d));
+                    wss.clients.forEach((client)=>{
+                        client.send(JSON.stringify(d))
+                    })
                 });
                 break;
         }
