@@ -32,16 +32,24 @@ const wss = new WebSocket.Server({server});
 wss.on('connection', (ws, req)=>{
     let id = req.headers['sec-websocket-key'];
     console.log(`${id} has joined`);
-    utils.getCurrentData((d)=>{
-        ws.send(JSON.stringify(d));
+    utils.getData((d)=>{
+        let newData = {
+            data: d,
+            type: 'initial'
+        }
+        ws.send(JSON.stringify(newData));
     });
     ws.on('message', (data)=>{
         let msg = JSON.parse(data);
         switch(msg.type){
             case 'save':
                 utils.saveCurrentData(msg.data, (d)=>{
+                    let newData = {
+                        data: d,
+                        type: 'save'
+                    }
                     wss.clients.forEach((client)=>{
-                        client.send(JSON.stringify(d))
+                        client.send(JSON.stringify(newData))
                     })
                 });
                 break;
@@ -52,8 +60,12 @@ wss.on('connection', (ws, req)=>{
 // Create and send new data to each connected user every 10 seconds
 setInterval(()=>{
     utils.generateNewCurrentData((d)=>{
+        let newData = {
+            data: d,
+            type: 'new'
+        }
         wss.clients.forEach((client)=>{
-            client.send(JSON.stringify(d))
+            client.send(JSON.stringify(newData))
         })
     })
 }, 10000);

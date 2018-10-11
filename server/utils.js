@@ -37,7 +37,7 @@ module.exports = {
     },
 
     // Get the current data saved to the db
-    getCurrentData: function(callback){
+    getData: function(callback){
         Data.findOne((err, data)=>{
             if(err){console.log(err)};
             callback(data);
@@ -67,14 +67,6 @@ module.exports = {
                 callback(d);
             })
         })
-    },
-
-    // Get the data saved to the saved data array
-    getData: function(callback){
-        Data.findOne((err, data)=>{
-            if(err){console.log(err)};
-            callback(data);
-        });
     }
 }
 
