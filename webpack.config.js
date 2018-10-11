@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require("compression-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
 	entry: ["babel-polyfill", "./src/index.js"],
