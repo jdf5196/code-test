@@ -39,7 +39,7 @@ module.exports = {
     getCurrentData: function(callback){
         Data.findOne((err, data)=>{
             if(err){console.log(err)};
-            callback(data.currentData);
+            callback(data);
         })
     },
 
@@ -51,7 +51,7 @@ module.exports = {
             data.getNewCurrentData(newData);
             data.save((err, d)=>{
                 if(err){console.log(err)};
-                callback(d.currentData);
+                callback(d);
             })
         })
     },
@@ -72,7 +72,7 @@ module.exports = {
     getSavedData: function(callback){
         Data.findOne((err, data)=>{
             if(err){console.log(err)};
-            callback(data.savedData);
+            callback(data);
         });
     }
 }

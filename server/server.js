@@ -34,9 +34,7 @@ wss.on('connection', (ws, req)=>{
         switch(msg.type){
             case 'save':
                 utils.saveCurrentData(msg.data, (d)=>{
-                    console.log(d);
-                    let newMsg = {type: "saveConfirmation"}
-                    ws.send(JSON.stringify(newMsg));
+                    ws.send(JSON.stringify(d));
                 });
                 break;
         }
