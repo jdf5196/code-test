@@ -25,7 +25,6 @@ DataSchema.methods.addSavedData = function(arr){
         this.savedData = [...this.savedData.slice(index, 100), ...arr];
         this.isCurrentDataSaved = true;
     }
-    console.log(this.savedData.length);
 }
 
 mongoose.model('Data', DataSchema);

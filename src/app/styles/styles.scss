@@ -1,0 +1,70 @@
+// Colors
+$f1: #b5b5b5;
+$lb: #384652;
+$db: #161c23;
+
+// Body
+body{
+    background-color: $db;
+    color: $f1;
+    font-family: Montserrat,sans-serif;
+    text-align:center;
+}
+
+// Content Wrapper
+.contentWrapper{
+    .title{
+        text-align: center;
+        font-size: 35px;
+    }
+    .link{
+        color: #00eafd;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-decoration:underline;
+        cursor:pointer;
+        &:hover{
+            color:#ea9bfa
+        }
+    }
+}
+
+// Chart
+#chartWrapper{
+    background-color: $lb;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 1px 1px 20px 3px #000;
+    .svg-container {
+        display: inline-block;
+        position: relative;
+        width: 90%;
+        padding-bottom: 52%;
+        vertical-align: top;
+        overflow: hidden;
+        max-width: 1000px;
+    }
+    .svg-content-responsive {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        max-width: 1000px;
+    }
+    .info{
+        position:absolute;
+        width:130px;
+        height:22px;
+        margin-left:calc(50% - 65px);
+        margin-top:53%;
+        background-color:$db;
+        color:$f1;
+    }
+    text{
+        font-size:17px;
+    }
+}
